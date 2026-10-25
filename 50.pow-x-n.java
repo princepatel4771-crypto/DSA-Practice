@@ -1,25 +1,35 @@
-class Solution {
+public class Solution {
     public double myPow(double x, int n) {
         long N = (long) n;
-        if(N < 0) {
-            x = 1.0 / x;
+        
+        // Agar power negative hai, positive banao
+        if (N < 0) {
             N = -N;
         }
+
         double result = 1.0;
-        while(N > 0) {
-            if((N & 1) == 1) {
-                result *= x;
+        double currentProduct = x;
+
+        // Binary Exponentiation
+        while (N > 0) {
+            if ((N & 1) == 1) {
+                result *= currentProduct;
             }
-            x *= x;
+            currentProduct *= currentProduct;
             N >>= 1;
         }
-        return result;
+
+        // Division end me sirf ek baar karo precision preserve karne ke liye
+        return (n < 0) ? (1.0 / result) : result;
     }
 
     public static void main(String[] args) {
         Solution sol = new Solution();
-        System.out.println(sol.myPow(2.00000, 10));   // 1024.0
-        System.out.println(sol.myPow(2.10000, 3));    // 9.261
-        System.out.println(sol.myPow(2.00000, -2));   // 0.25
+
+        // Failed test case verification:
+        double x = -0.9999999968539456;
+        int n = -1669585506;
+        System.out.printf("Output: %.5f\n", sol.myPow(x, n)); 
+        // Expected: 191.06370
     }
 }
